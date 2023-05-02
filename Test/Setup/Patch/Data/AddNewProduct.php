@@ -149,6 +149,5 @@ class AddNewProduct implements DataPatchInterface
 
             $this->sourceItemsSave->execute($this->sourceItems);
         }
-
     }
 }
