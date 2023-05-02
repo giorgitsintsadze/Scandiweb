@@ -23,18 +23,39 @@ use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 
 class AddNewProduct implements DataPatchInterface
 {
+    /**
+     * @var State
+     */
     protected State $appState;
 
+    /**
+     * @var ProductInterfaceFactory
+     */
     protected ProductInterfaceFactory $productFactory;
 
+    /**
+     * @var ProductRepositoryInterface
+     */
     protected ProductRepositoryInterface $productRepository;
 
+    /**
+     * @var CategoryFactory
+     */
     protected CategoryFactory $categoryFactory;
 
+    /**
+     * @var SourceItemsSaveInterface
+     */
     protected SourceItemsSaveInterface $sourceItemsSave;
 
+    /**
+     * @var SourceItemInterfaceFactory
+     */
     protected SourceItemInterfaceFactory $sourceItemFactory;
 
+    /**
+     * @var array
+     */
     protected array $sourceItems;
 
     /**
@@ -62,11 +83,17 @@ class AddNewProduct implements DataPatchInterface
         $this->sourceItemFactory = $sourceItemFactory;
     }
 
+    /**
+     * @return array|string[]
+     */
     public static function getDependencies(): array
     {
         return [];
     }
 
+    /**
+     * @return array|string[]
+     */
     public function getAliases(): array
     {
         return [];
