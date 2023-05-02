@@ -118,30 +118,37 @@ class AddNewProduct implements DataPatchInterface
     public function execute(): void
     {
         $product = $this->productFactory->create();
-        $menCategory = $this->categoryFactory->create()->loadByAttribute('name', 'Men');
+        $sku = "test-product-sku3";
 
-        $product->setData(
-            [
-                'sku' => 'test-product-sku2',
-                'name' => 'test-product-name2',
-                'description' => 'test-product-Description2',
-                'price' => 99.99,
-                'attribute_set_id' => 4,
-                'status' => Status::STATUS_ENABLED,
-                'visibility' => Visibility::VISIBILITY_BOTH,
-                'type_id' => Type::TYPE_SIMPLE,
-                'category_ids' => [$menCategory->getId()],
-            ]);
+        if ($product->getSku() == $sku) {
+            return;
+        } else {
+            $menCategory = $this->categoryFactory->create()->loadByAttribute('name', 'Men');
 
-        $this->productRepository->save($product);
+            $product->setTypeId(Type::TYPE_SIMPLE)
+                ->setAttributeSetId(4)
+                ->setName("test-product-name3")
+                ->setSku($sku)
+                ->setVisibility(Visibility::VISIBILITY_BOTH)
+                ->setStatus(Status::STATUS_ENABLED)
+                ->setPrice(99.99)
+                ->setDescription("test-product-Description2")
+                ->setUrlKey("test-product-url-key" . rand(1, 1000))
+                ->setCategoryIds([$menCategory->getId()]);
 
-        $sourceItem = $this->sourceItemFactory->create();
-        $sourceItem->setSourceCode('default');
-        $sourceItem->setQuantity(100);
-        $sourceItem->setSku($product->getSku());
-        $sourceItem->setStatus(SourceItemInterface::STATUS_IN_STOCK);
-        $this->sourceItems[] = $sourceItem;
+            $product->setData('size', 'L');
 
-        $this->sourceItemsSave->execute($this->sourceItems);
+            $this->productRepository->save($product);
+
+            $sourceItem = $this->sourceItemFactory->create();
+            $sourceItem->setSourceCode('default');
+            $sourceItem->setQuantity(100);
+            $sourceItem->setSku($product->getSku());
+            $sourceItem->setStatus(SourceItemInterface::STATUS_IN_STOCK);
+            $this->sourceItems[] = $sourceItem;
+
+            $this->sourceItemsSave->execute($this->sourceItems);
+        }
+
     }
 }
